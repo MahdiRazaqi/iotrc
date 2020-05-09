@@ -11,9 +11,14 @@ import (
 
 // Log model
 type Log struct {
-	ID      primitive.ObjectID `bson:"_id" json:"_id"`
-	Created time.Time          `bson:"created" json:"created"`
-	Light   float64            `bson:"light" json:"light"`
+	ID           primitive.ObjectID `bson:"_id"`
+	Created      time.Time          `bson:"created"`
+	TempDHT      int                `bson:"temp_dht"`
+	HumidityDHT  int                `bson:"humidity_dht"`
+	DustHumidity int                `bson:"dust_humidity"`
+	Light        int                `bson:"light"`
+	PompStatus   bool               `bson:"pomp_status"`
+	LampStatus   bool               `bson:"lamp_status"`
 }
 
 func (l *Log) collection() *mongo.Collection {

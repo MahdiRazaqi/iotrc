@@ -6,7 +6,12 @@ import (
 )
 
 type logForm struct {
-	Light float64 `json:"light" form:"light"`
+	TempDHT      int  `json:"temp_dht" form:"temp_dht"`
+	HumidityDHT  int  `json:"humidity_dht" form:"humidity_dht"`
+	DustHumidity int  `json:"dust_humidity" form:"dust_humidity"`
+	Light        int  `json:"light" form:"light"`
+	PompStatus   bool `json:"pomp_status" form:"pomp_status"`
+	LampStatus   bool `json:"lamp_status" form:"lamp_status"`
 }
 
 func addLog(c echo.Context) error {
@@ -16,7 +21,12 @@ func addLog(c echo.Context) error {
 	}
 
 	l := &log.Log{
-		Light: formData.Light,
+		TempDHT:      formData.TempDHT,
+		HumidityDHT:  formData.HumidityDHT,
+		DustHumidity: formData.DustHumidity,
+		Light:        formData.Light,
+		PompStatus:   formData.PompStatus,
+		LampStatus:   formData.LampStatus,
 	}
 	if err := l.InsertOne(); err != nil {
 		return c.JSON(400, echo.Map{"error": err.Error()})
