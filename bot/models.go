@@ -1,4 +1,4 @@
-package telebot
+package bot
 
 // Params model
 type Params map[string]interface{}
