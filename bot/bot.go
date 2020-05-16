@@ -15,7 +15,7 @@ var endpoint string = "https://api.telegram.org/bot1296532223:AAFhySQkXvZCkQbKAN
 
 // Start bot server
 func Start() {
-	if err := setWebhook("https://test.com/bot"); err != nil {
+	if err := setWebhook("https://6ad8ff38.ngrok.io/api/v1/bot"); err != nil {
 		log.Fatalln(err)
 	}
 }
