@@ -1,11 +1,14 @@
 package v1
 
 import (
-	"github.com/MahdiRazaqi/iotrc/log"
+	"fmt"
+
+	"github.com/MahdiRazaqi/iotrc/bot"
+	"github.com/MahdiRazaqi/iotrc/sensorlog"
 	"github.com/labstack/echo"
 )
 
-type logForm struct {
+type sensorlogForm struct {
 	TempDHT      int  `json:"temp_dht" form:"temp_dht"`
 	HumidityDHT  int  `json:"humidity_dht" form:"humidity_dht"`
 	DustHumidity int  `json:"dust_humidity" form:"dust_humidity"`
@@ -14,13 +17,13 @@ type logForm struct {
 	LampStatus   bool `json:"lamp_status" form:"lamp_status"`
 }
 
-func addLog(c echo.Context) error {
-	formData := new(logForm)
+func addSensorlog(c echo.Context) error {
+	formData := new(sensorlogForm)
 	if err := c.Bind(formData); err != nil {
 		return c.JSON(400, echo.Map{"error": err.Error()})
 	}
 
-	l := &log.Log{
+	l := &sensorlog.Sensorlog{
 		TempDHT:      formData.TempDHT,
 		HumidityDHT:  formData.HumidityDHT,
 		DustHumidity: formData.DustHumidity,
@@ -31,6 +34,11 @@ func addLog(c echo.Context) error {
 	if err := l.InsertOne(); err != nil {
 		return c.JSON(400, echo.Map{"error": err.Error()})
 	}
+
+	msg := fmt.Sprintf("<b>Temp: </b>%v%%0A<b>Humidity: </b>%v%%0A<b>DustHumidity: </b>%v%%0A<b>Light: </b>%v%%0A<b>Pomp Status: </b>%v%%0A<b>Lamp Status: </b>%v%%0A%%0A<code>%v</code>", l.TempDHT, l.HumidityDHT, l.DustHumidity, l.Light, l.PompStatus, l.LampStatus, l.Created.Format("02-01-2006 15:04:05"))
+
+	go bot.SendMessage(1147932122, msg)
+	go bot.SendMessage(187805876, msg)
 
 	return c.JSON(200, echo.Map{
 		"message": "added log successfully",

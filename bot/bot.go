@@ -48,7 +48,7 @@ func request(url, method string, params Params) (*http.Response, error) {
 	return resp, nil
 }
 
-func requestToBot(path string, params Params) (interface{}, error) {
+func requestToBot(path string, params Params) (*TelegramResponse, error) {
 	resp, err := request(endpoint+path, http.MethodGet, params)
 	if err != nil {
 		return nil, err
@@ -60,12 +60,12 @@ func requestToBot(path string, params Params) (interface{}, error) {
 		return nil, err
 	}
 
-	var response map[string]interface{}
+	var response *TelegramResponse
 	if err := json.Unmarshal(data, &response); err != nil {
 		return nil, err
 	}
 
-	if !response["ok"].(bool) {
+	if !response.Ok {
 		return nil, errors.New("unsuccessful request")
 	}
 

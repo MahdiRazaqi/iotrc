@@ -1,4 +1,4 @@
-package log
+package sensorlog
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Log model
-type Log struct {
+// Sensorlog model
+type Sensorlog struct {
 	ID           primitive.ObjectID `bson:"_id"`
 	Created      time.Time          `bson:"created"`
 	TempDHT      int                `bson:"temp_dht"`
@@ -21,12 +21,12 @@ type Log struct {
 	LampStatus   bool               `bson:"lamp_status"`
 }
 
-func (l *Log) collection() *mongo.Collection {
-	return database.Mongo.Collection("log")
+func (l *Sensorlog) collection() *mongo.Collection {
+	return database.Mongo.Collection("sensorlog")
 }
 
-// InsertOne log to database
-func (l *Log) InsertOne() error {
+// InsertOne sensorlog to database
+func (l *Sensorlog) InsertOne() error {
 	l.ID = primitive.NewObjectID()
 	l.Created = time.Now()
 	_, err := l.collection().InsertOne(context.Background(), database.ConvertToBson(l))

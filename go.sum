@@ -1,4 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/MahdiRazaqi/TwoDoBot v1.0.0 h1:vXaq/OjUxTfCJGgwgMMkvhi6/CiaLQkFuPY9RfH2v4U=
+github.com/MahdiRazaqi/TwoDoBot v1.0.0/go.mod h1:Ybk9JBObqyn1uxTj/m8gZfnbS78UMsCxiD42u1Ehuu0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-stack/stack v1.8.0 h1:5SgMzNM5HxrEjV0ww2lTmX6E2Izsfxas4+YHWRs3Lsk=

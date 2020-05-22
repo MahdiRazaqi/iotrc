@@ -15,6 +15,9 @@ func Register(e *echo.Echo) {
 	r := v1.Group("/")
 	// r.Use(middleware.JWT([]byte(signature)), userRequired)
 
-	logGroup := r.Group("log")
-	logGroup.POST("", addLog)
+	sensorlogGroup := r.Group("sensorlog")
+	sensorlogGroup.POST("", addSensorlog)
+
+	botGroup := r.Group("bot")
+	botGroup.POST("", listener)
 }
