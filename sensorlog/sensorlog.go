@@ -13,10 +13,10 @@ import (
 type Sensorlog struct {
 	ID           primitive.ObjectID `bson:"_id"`
 	Created      time.Time          `bson:"created"`
-	TempDHT      int                `bson:"temp_dht"`
-	HumidityDHT  int                `bson:"humidity_dht"`
-	DustHumidity int                `bson:"dust_humidity"`
-	Light        int                `bson:"light"`
+	TempDHT      float64            `bson:"temp_dht"`
+	HumidityDHT  float64            `bson:"humidity_dht"`
+	DustHumidity float64            `bson:"dust_humidity"`
+	Light        float64            `bson:"light"`
 	PompStatus   bool               `bson:"pomp_status"`
 	LampStatus   bool               `bson:"lamp_status"`
 }

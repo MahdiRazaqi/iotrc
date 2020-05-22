@@ -9,12 +9,12 @@ import (
 )
 
 type sensorlogForm struct {
-	TempDHT      int  `json:"temp_dht" form:"temp_dht"`
-	HumidityDHT  int  `json:"humidity_dht" form:"humidity_dht"`
-	DustHumidity int  `json:"dust_humidity" form:"dust_humidity"`
-	Light        int  `json:"light" form:"light"`
-	PompStatus   bool `json:"pomp_status" form:"pomp_status"`
-	LampStatus   bool `json:"lamp_status" form:"lamp_status"`
+	TempDHT      float64 `json:"temp_dht" form:"temp_dht"`
+	HumidityDHT  float64 `json:"humidity_dht" form:"humidity_dht"`
+	DustHumidity float64 `json:"dust_humidity" form:"dust_humidity"`
+	Light        float64 `json:"light" form:"light"`
+	PompStatus   bool    `json:"pomp_status" form:"pomp_status"`
+	LampStatus   bool    `json:"lamp_status" form:"lamp_status"`
 }
 
 func addSensorlog(c echo.Context) error {
@@ -35,7 +35,7 @@ func addSensorlog(c echo.Context) error {
 		return c.JSON(400, echo.Map{"error": err.Error()})
 	}
 
-	msg := fmt.Sprintf("<b>Temp: </b>%v%%0A<b>Humidity: </b>%v%%0A<b>DustHumidity: </b>%v%%0A<b>Light: </b>%v%%0A<b>Pomp Status: </b>%v%%0A<b>Lamp Status: </b>%v%%0A%%0A<code>%v</code>", l.TempDHT, l.HumidityDHT, l.DustHumidity, l.Light, l.PompStatus, l.LampStatus, l.Created.Format("02-01-2006 15:04:05"))
+	msg := fmt.Sprintf("<b>Temp: </b>%.2f%%0A<b>Humidity: </b>%.2f%%0A<b>DustHumidity: </b>%.2f%%0A<b>Light: </b>%.2f%%0A<b>Pomp Status: </b>%v%%0A<b>Lamp Status: </b>%v%%0A%%0A<code>%v</code>", l.TempDHT, l.HumidityDHT, l.DustHumidity, l.Light, l.PompStatus, l.LampStatus, l.Created.Format("02-01-2006 15:04:05"))
 
 	go bot.SendMessage(1147932122, msg)
 	go bot.SendMessage(187805876, msg)
