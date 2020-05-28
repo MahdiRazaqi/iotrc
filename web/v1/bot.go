@@ -19,5 +19,8 @@ func listener(c echo.Context) error {
 	if err := json.Unmarshal(body, &u); err != nil {
 		log.Fatalln(err)
 	}
+
+	bot.MessageHandler(*u.Message)
+
 	return nil
 }

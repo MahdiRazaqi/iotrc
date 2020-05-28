@@ -5,8 +5,10 @@ import (
 	"time"
 
 	"github.com/MahdiRazaqi/iotrc/database"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // Sensorlog model
@@ -31,4 +33,32 @@ func (l *Sensorlog) InsertOne() error {
 	l.Created = time.Now()
 	_, err := l.collection().InsertOne(context.Background(), database.ConvertToBson(l))
 	return err
+}
+
+// Find sensorlog
+func Find(filter bson.M, page, limit int) ([]Sensorlog, error) {
+	s := new(Sensorlog)
+	ctx := context.Background()
+	options := options.Find()
+	options.SetLimit(int64(limit))
+	if page > 0 {
+		options.SetSkip(int64((page - 1) * limit))
+	}
+
+	cursor, err := s.collection().Find(ctx, filter, options)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	sensorlogs := []Sensorlog{}
+	for cursor.Next(ctx) {
+		s := new(Sensorlog)
+		if err := cursor.Decode(s); err != nil {
+			continue
+		}
+		sensorlogs = append(sensorlogs, *s)
+	}
+
+	return sensorlogs, nil
 }
