@@ -3,10 +3,8 @@ package bot
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -48,26 +46,26 @@ func request(url, method string, params Params) (*http.Response, error) {
 	return resp, nil
 }
 
-func requestToBot(path string, params Params) (*TelegramResponse, error) {
-	resp, err := request(endpoint+path, http.MethodGet, params)
+func proxy(path string, params Params) (*http.Response, error) {
+	var contentData string
+	for k, v := range params {
+		if contentData != "" {
+			contentData += "&"
+		}
+		contentData += k + "=" + fmt.Sprintf("%v", v)
+	}
+
+	json, err := json.Marshal(map[string]interface{}{
+		"UrlBox":     endpoint + path + "?" + contentData,
+		"MethodList": http.MethodGet,
+	})
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	resp, err := http.Post("https://www.httpdebugger.com/tools/ViewHttpHeaders.aspx", "application/json", bytes.NewBuffer(json))
 	if err != nil {
 		return nil, err
 	}
-
-	var response *TelegramResponse
-	if err := json.Unmarshal(data, &response); err != nil {
-		return nil, err
-	}
-
-	if !response.Ok {
-		return nil, errors.New("unsuccessful request")
-	}
-
-	return response, nil
+	return resp, nil
 }

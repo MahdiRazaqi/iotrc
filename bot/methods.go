@@ -1,7 +1,7 @@
 package bot
 
 func setWebhook(url string) error {
-	_, err := requestToBot("/setWebhook", Params{
+	_, err := proxy("/setWebhook", Params{
 		"url": url,
 	})
 	return err
@@ -9,7 +9,7 @@ func setWebhook(url string) error {
 
 // SendMessage to telegram
 func SendMessage(userID int, text string) (Message, error) {
-	_, err := requestToBot("/sendMessage", Params{
+	_, err := proxy("/sendMessage", Params{
 		"chat_id":    userID,
 		"text":       text,
 		"parse_mode": "HTML",
