@@ -12,12 +12,20 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// CurrentState global variable for keep last sensor logs
+var CurrentState map[string]bool
+
 var endpoint string = "https://api.telegram.org/bot1296532223:AAFhySQkXvZCkQbKANGgaRCa8TU3KBq4etk"
 
 // Start bot server
 func Start() {
-	if err := setWebhook("https://5ecf7d78bc51.ngrok.io/api/v1/bot"); err != nil {
+	if err := setWebhook("https://ccc5cda5f236.ngrok.io/api/v1/bot"); err != nil {
 		log.Fatalln(err)
+	}
+
+	CurrentState = map[string]bool{
+		"pomp_status": false,
+		"lamp_status": false,
 	}
 }
 
@@ -83,7 +91,7 @@ func MessageHandler(message Message) {
 		sensorlogs, err := sensorlog.Find(bson.M{}, 1, 10)
 		if err != nil {
 			log.Fatalln(err)
-			return
+			break
 		}
 
 		var msg string
@@ -97,16 +105,20 @@ func MessageHandler(message Message) {
 		SendMessage(message.From.ID, msg)
 		break
 	case "/turn_on_pomp":
-		SendMessage(message.From.ID, "turn_on_pomp")
+		CurrentState["pomp_status"] = true
+		SendMessage(message.From.ID, "Pomp turn on.")
 		break
 	case "/turn_off_pomp":
-		SendMessage(message.From.ID, "turn_off_pomp")
+		CurrentState["pomp_status"] = false
+		SendMessage(message.From.ID, "Pomp turn off.")
 		break
 	case "/turn_on_lamp":
-		SendMessage(message.From.ID, "turn_on_lamp")
+		CurrentState["lamp_status"] = true
+		SendMessage(message.From.ID, "Lamp turn on.")
 		break
 	case "/turn_off_lamp":
-		SendMessage(message.From.ID, "turn_off_lamp")
+		CurrentState["lamp_status"] = false
+		SendMessage(message.From.ID, "Lamp turn off.")
 		break
 	}
 }

@@ -20,4 +20,7 @@ func Register(e *echo.Echo) {
 
 	botGroup := r.Group("bot")
 	botGroup.POST("", listener)
+
+	stateGroup := r.Group("state")
+	stateGroup.GET("", currentState)
 }
