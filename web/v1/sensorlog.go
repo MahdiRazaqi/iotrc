@@ -35,11 +35,6 @@ func addSensorlog(c echo.Context) error {
 		return c.JSON(400, echo.Map{"error": err.Error()})
 	}
 
-	bot.CurrentState = map[string]bool{
-		"pomp_status": formData.PompStatus,
-		"lamp_status": formData.LampStatus,
-	}
-
 	msg := fmt.Sprintf("<b>Temp: </b>%.2f%%0A<b>Humidity: </b>%.2f%%0A<b>DustHumidity: </b>%.2f%%0A<b>Light: </b>%.2f%%0A<b>Pomp Status: </b>%v%%0A<b>Lamp Status: </b>%v%%0A%%0A<code>%v</code>", l.TempDHT, l.HumidityDHT, l.DustHumidity, l.Light, l.PompStatus, l.LampStatus, l.Created.Format("02-01-2006 15:04:05"))
 
 	go bot.SendMessage(1147932122, msg)

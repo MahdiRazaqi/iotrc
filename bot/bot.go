@@ -13,19 +13,17 @@ import (
 )
 
 // CurrentState global variable for keep last sensor logs
-var CurrentState map[string]bool
+var CurrentState = map[string]bool{
+	"pomp_status": false,
+	"lamp_status": false,
+}
 
 var endpoint string = "https://api.telegram.org/bot1296532223:AAFhySQkXvZCkQbKANGgaRCa8TU3KBq4etk"
 
 // Start bot server
 func Start() {
-	if err := setWebhook("https://ccc5cda5f236.ngrok.io/api/v1/bot"); err != nil {
+	if err := setWebhook("https://bdbf6c15b10b.ngrok.io/api/v1/bot"); err != nil {
 		log.Fatalln(err)
-	}
-
-	CurrentState = map[string]bool{
-		"pomp_status": false,
-		"lamp_status": false,
 	}
 }
 
