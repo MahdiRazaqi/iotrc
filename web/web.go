@@ -9,5 +9,5 @@ import (
 func Start() {
 	e := echo.New()
 	v1.Register(e)
-	e.Start(":8080")
+	e.Start(":80")
 }
