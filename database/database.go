@@ -16,9 +16,12 @@ var Mongo *mongo.Database
 func Connect() error {
 	cfg := config.Config.Mongo
 
-	clientOptions := options.Client().ApplyURI(cfg.Host)
+	opt := options.Client()
+	if cfg.Host != "" {
+		opt.ApplyURI(cfg.Host)
+	}
 
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+	client, err := mongo.Connect(context.TODO(), opt)
 	if err != nil {
 		return err
 	}
