@@ -2,29 +2,33 @@ package database
 
 import (
 	"context"
-	"log"
 
+	"github.com/MahdiRazaqi/iotrc/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Mongo connection
 var Mongo *mongo.Database
 
 // Connect to MongoDB
-func Connect() {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+func Connect() error {
+	cfg := config.Config.Mongo
+
+	clientOptions := options.Client().ApplyURI(cfg.Host)
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		log.Fatal("connecting to mongo ", err)
+		return err
 	}
 
 	if err = client.Ping(context.TODO(), nil); err != nil {
-		log.Fatal("connecting to mongo ", err)
+		return err
 	}
+	Mongo = client.Database(cfg.DB)
 
-	Mongo = client.Database("iotrc")
+	return nil
 }
 
 // ConvertToBson convert interface to bson object
