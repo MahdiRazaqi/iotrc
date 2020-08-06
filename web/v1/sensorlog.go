@@ -1,11 +1,11 @@
 package v1
 
 import (
-	"fmt"
+	"strconv"
 
-	"github.com/MahdiRazaqi/iotrc/bot"
 	"github.com/MahdiRazaqi/iotrc/sensorlog"
 	"github.com/labstack/echo"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type sensorlogForm struct {
@@ -13,8 +13,7 @@ type sensorlogForm struct {
 	HumidityDHT  float64 `json:"humidity_dht" form:"humidity_dht"`
 	DustHumidity float64 `json:"dust_humidity" form:"dust_humidity"`
 	Light        float64 `json:"light" form:"light"`
-	PompStatus   bool    `json:"pomp_status" form:"pomp_status"`
-	LampStatus   bool    `json:"lamp_status" form:"lamp_status"`
+	MQ9          float64 `json:"mq9" form:"mq9"`
 }
 
 func addSensorlog(c echo.Context) error {
@@ -28,19 +27,27 @@ func addSensorlog(c echo.Context) error {
 		HumidityDHT:  formData.HumidityDHT,
 		DustHumidity: formData.DustHumidity,
 		Light:        formData.Light,
-		PompStatus:   formData.PompStatus,
-		LampStatus:   formData.LampStatus,
+		MQ9:          formData.MQ9,
 	}
 	if err := l.InsertOne(); err != nil {
 		return c.JSON(400, echo.Map{"error": err.Error()})
 	}
 
-	msg := fmt.Sprintf("<b>Temp: </b>%.2f%%0A<b>Humidity: </b>%.2f%%0A<b>DustHumidity: </b>%.2f%%0A<b>Light: </b>%.2f%%0A<b>Pomp Status: </b>%v%%0A<b>Lamp Status: </b>%v%%0A%%0A<code>%v</code>", l.TempDHT, l.HumidityDHT, l.DustHumidity, l.Light, l.PompStatus, l.LampStatus, l.Created.Format("02-01-2006 15:04:05"))
-
-	go bot.SendMessage(1147932122, msg)
-	go bot.SendMessage(187805876, msg)
-
 	return c.JSON(200, echo.Map{
 		"message": "added log successfully",
+	})
+}
+
+func listSensorlogs(c echo.Context) error {
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+
+	sensorlogs, err := sensorlog.Find(bson.M{}, page, limit)
+	if err != nil {
+		return c.JSON(400, echo.Map{"error": err.Error()})
+	}
+
+	return c.JSON(200, echo.Map{
+		"sensorlogs": sensorlogs,
 	})
 }

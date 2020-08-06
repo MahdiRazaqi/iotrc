@@ -19,8 +19,7 @@ type Sensorlog struct {
 	HumidityDHT  float64            `bson:"humidity_dht"`
 	DustHumidity float64            `bson:"dust_humidity"`
 	Light        float64            `bson:"light"`
-	PompStatus   bool               `bson:"pomp_status"`
-	LampStatus   bool               `bson:"lamp_status"`
+	MQ9          float64            `bson:"mq9"`
 }
 
 func (l *Sensorlog) collection() *mongo.Collection {
