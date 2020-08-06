@@ -13,13 +13,13 @@ import (
 
 // Sensorlog model
 type Sensorlog struct {
-	ID           primitive.ObjectID `bson:"_id"`
-	Created      time.Time          `bson:"created"`
-	TempDHT      float64            `bson:"temp_dht"`
-	HumidityDHT  float64            `bson:"humidity_dht"`
-	DustHumidity float64            `bson:"dust_humidity"`
-	Light        float64            `bson:"light"`
-	MQ9          float64            `bson:"mq9"`
+	ID           primitive.ObjectID `bson:"_id" json:"_id"`
+	Created      time.Time          `bson:"created" json:"created"`
+	TempDHT      float64            `bson:"temp_dht" json:"temp_dht"`
+	HumidityDHT  float64            `bson:"humidity_dht" json:"humidity_dht"`
+	DustHumidity float64            `bson:"dust_humidity" json:"dust_humidity"`
+	Light        float64            `bson:"light" json:"light"`
+	MQ9          float64            `bson:"mq9" json:"mq9"`
 }
 
 func (l *Sensorlog) collection() *mongo.Collection {
