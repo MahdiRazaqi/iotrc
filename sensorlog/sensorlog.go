@@ -40,7 +40,7 @@ func Find(filter bson.M, page, limit int) ([]Sensorlog, error) {
 	ctx := context.Background()
 	options := options.Find()
 	options.SetLimit(int64(limit))
-	options.SetSort(bson.D{{"created", 1}})
+	options.SetSort(bson.D{{"created", -1}})
 	if page > 0 {
 		options.SetSkip(int64((page - 1) * limit))
 	}
